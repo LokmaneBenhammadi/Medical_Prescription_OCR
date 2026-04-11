@@ -1,0 +1,13 @@
+/data/raw
+/data/processed
+/data/splits
+
+# Ignore all files in the models directory
+/checkpoints/*
+
+# Ignore all venv directories
+venv/
+
+#Ignore Claude files
+
+/CLAUDE.md
