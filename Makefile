@@ -6,7 +6,7 @@ PORT ?= 8000
 CONFIG ?= configs/config.yaml
 IMAGE ?= path/to/prescription.jpg
 
-.PHONY: help install run-api train infer check clean
+.PHONY: help install run-api train infer check clean data
 
 help:
 	@echo "Available targets:"
@@ -16,9 +16,13 @@ help:
 	@echo "  make infer       - Placeholder inference command"
 	@echo "  make check       - Syntax-check core Python modules"
 	@echo "  make clean       - Remove Python cache artifacts"
+	@echo "  make data        - Download automated datasets"
 
 install:
 	$(PIP) install -r requirements.txt
+
+data:
+	$(PYTHON) scripts/download_data.py
 
 run-api:
 	$(UVICORN) api.main:app --host $(HOST) --port $(PORT) --reload
