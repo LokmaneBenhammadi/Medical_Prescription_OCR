@@ -18,3 +18,11 @@ class PrescriptionResponse(BaseModel):
     raw_text: str
     entries: list[PrescriptionEntry]
     image_id: str
+
+
+class OcrResponse(BaseModel):
+    """Raw OCR response for baseline inference."""
+
+    raw_text: str
+    lines: list[str]
+    image_id: str

@@ -1,8 +1,14 @@
 """FastAPI application skeleton for medical prescription OCR serving."""
 
-from fastapi import FastAPI, File, UploadFile
+import os
+
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+
+from api.schemas import OcrResponse
+from api.utils import decode_image
+from src.inference import OCRPipeline
 
 tags_metadata = [
     {
@@ -33,12 +39,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+CONFIG_PATH = os.environ.get("CONFIG_PATH", "configs/config.yaml")
+pipeline: OCRPipeline | None = None
+
 
 @app.on_event("startup")
 async def startup_event() -> None:
     """Initialize startup resources for the API service."""
 
-    print("Model will be loaded here")
+    global pipeline
+    pipeline = OCRPipeline.from_config(CONFIG_PATH)
 
 
 @app.get("/", include_in_schema=False)
@@ -55,8 +65,18 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/predict", tags=["Inference"], summary="OCR prediction placeholder")
-async def predict(image: UploadFile = File(...)) -> dict[str, str]:
-    """Prediction endpoint placeholder for uploaded prescription images."""
+@app.post("/predict", tags=["Inference"], summary="OCR prediction", response_model=OcrResponse)
+async def predict(image: UploadFile = File(...)) -> OcrResponse:
+    """Prediction endpoint for uploaded prescription images."""
 
-    return {"message": "not implemented yet"}
+    if pipeline is None:
+        raise HTTPException(status_code=500, detail="Model not loaded.")
+    try:
+        file_bytes = await image.read()
+        pil_img = decode_image(file_bytes)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    result = pipeline.predict(pil_img)
+    image_id = image.filename or "uploaded"
+    return OcrResponse(raw_text=result["raw_text"], lines=result["lines"], image_id=image_id)
