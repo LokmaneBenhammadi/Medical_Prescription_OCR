@@ -34,7 +34,8 @@ class TrOCREngine:
 		self.model.config.decoder_start_token_id = self.processor.tokenizer.cls_token_id
 		self.model.config.pad_token_id = self.processor.tokenizer.pad_token_id
 		self.model.config.eos_token_id = self.processor.tokenizer.sep_token_id
-		self.model.config.max_length = max_length
+		self.model.generation_config.max_length = max_length
+		self.model.generation_config.num_beams = beam_size
 		self.model.to(self.device)
 		self.model.eval()
 		self.max_length = max_length
