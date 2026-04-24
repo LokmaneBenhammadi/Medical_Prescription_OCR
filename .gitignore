@@ -15,3 +15,6 @@ venv/
 #Ignore Claude files
 
 /CLAUDE.md
+**/__pycache__/
+*.pyc
+.pytest_cache/
