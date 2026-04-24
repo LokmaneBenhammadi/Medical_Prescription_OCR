@@ -22,10 +22,3 @@ data:
 inference:
   beam_size: 4
   device: "cuda"
-<<<<<<< HEAD
-
-detection:
-  min_line_height: 15
-  preprocess_for_lines: true
-=======
->>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

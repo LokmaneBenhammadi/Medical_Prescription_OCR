@@ -1,10 +1,7 @@
 /data/raw
 /data/processed
 /data/splits
-<<<<<<< HEAD
-=======
 /data/splits.zip
->>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9
 
 # Ignore all files in the models directory
 /checkpoints/*
@@ -18,3 +15,4 @@ venv/
 **/__pycache__/
 *.pyc
 .pytest_cache/
+Downloads/
