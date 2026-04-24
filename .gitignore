@@ -17,3 +17,4 @@ venv/
 .pytest_cache/
 Downloads/
 secrets.txt
+Screenshots/
