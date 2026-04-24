@@ -1,5 +1,6 @@
 """FastAPI application skeleton for medical prescription OCR serving."""
 
+<<<<<<< HEAD
 import os
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -10,6 +11,12 @@ from api.schemas import OcrResponse
 from api.utils import decode_image
 from src.inference import OCRPipeline
 
+=======
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9
 tags_metadata = [
     {
         "name": "System",
@@ -39,16 +46,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 CONFIG_PATH = os.environ.get("CONFIG_PATH", "configs/config.yaml")
 pipeline: OCRPipeline | None = None
 
+=======
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9
 
 @app.on_event("startup")
 async def startup_event() -> None:
     """Initialize startup resources for the API service."""
 
+<<<<<<< HEAD
     global pipeline
     pipeline = OCRPipeline.from_config(CONFIG_PATH)
+=======
+    print("Model will be loaded here")
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9
 
 
 @app.get("/", include_in_schema=False)
@@ -65,6 +79,7 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+<<<<<<< HEAD
 @app.post("/predict", tags=["Inference"], summary="OCR prediction", response_model=OcrResponse)
 async def predict(image: UploadFile = File(...)) -> OcrResponse:
     """Prediction endpoint for uploaded prescription images."""
@@ -80,3 +95,10 @@ async def predict(image: UploadFile = File(...)) -> OcrResponse:
     result = pipeline.predict(pil_img)
     image_id = image.filename or "uploaded"
     return OcrResponse(raw_text=result["raw_text"], lines=result["lines"], image_id=image_id)
+=======
+@app.post("/predict", tags=["Inference"], summary="OCR prediction placeholder")
+async def predict(image: UploadFile = File(...)) -> dict[str, str]:
+    """Prediction endpoint placeholder for uploaded prescription images."""
+
+    return {"message": "not implemented yet"}
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

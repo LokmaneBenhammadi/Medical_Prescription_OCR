@@ -1,5 +1,6 @@
 """Model construction utilities for OCR and related deep learning components."""
 
+<<<<<<< HEAD
 from __future__ import annotations
 
 from typing import Iterable
@@ -59,3 +60,7 @@ class TrOCREngine:
 			num_beams=num_beams or self.beam_size,
 		)
 		return self.processor.batch_decode(ids, skip_special_tokens=True)
+=======
+# import torch
+# from transformers import TrOCRProcessor, VisionEncoderDecoderModel
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

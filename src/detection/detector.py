@@ -1,5 +1,6 @@
 """Detection interfaces for locating text lines or regions before OCR transcription."""
 
+<<<<<<< HEAD
 from __future__ import annotations
 
 import cv2
@@ -54,3 +55,7 @@ def detect_line_bboxes(
 			merged.append([top, bottom])
 
 	return [(int(t), int(b)) for t, b in merged]
+=======
+# import cv2
+# import numpy as np
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

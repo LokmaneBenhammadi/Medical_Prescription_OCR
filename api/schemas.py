@@ -18,6 +18,7 @@ class PrescriptionResponse(BaseModel):
     raw_text: str
     entries: list[PrescriptionEntry]
     image_id: str
+<<<<<<< HEAD
 
 
 class OcrResponse(BaseModel):
@@ -26,3 +27,5 @@ class OcrResponse(BaseModel):
     raw_text: str
     lines: list[str]
     image_id: str
+=======
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

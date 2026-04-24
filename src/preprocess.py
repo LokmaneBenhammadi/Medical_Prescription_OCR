@@ -1,5 +1,6 @@
 """Image preprocessing pipeline for prescription image normalization and preparation."""
 
+<<<<<<< HEAD
 from __future__ import annotations
 
 from typing import Iterable
@@ -77,3 +78,7 @@ def batch_preprocess(images: Iterable[Image.Image]) -> list[Image.Image]:
 	"""Convenience wrapper for preprocessing multiple images."""
 
 	return [preprocess_image(img) for img in images]
+=======
+# import cv2
+# import numpy as np
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

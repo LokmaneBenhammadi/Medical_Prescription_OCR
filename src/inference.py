@@ -1,5 +1,6 @@
 """Inference entry points for running OCR on new prescription images."""
 
+<<<<<<< HEAD
 from __future__ import annotations
 
 import argparse
@@ -94,3 +95,7 @@ def main() -> None:
 
 if __name__ == "__main__":
 	main()
+=======
+# import torch
+# from PIL import Image
+>>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9
