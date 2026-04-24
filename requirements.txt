@@ -14,9 +14,4 @@ pydantic>=2.0.0
 ultralytics>=8.0.0
 PyYAML>=6.0
 tqdm>=4.66.0
-<<<<<<< HEAD
 accelerate>=0.27.0
-=======
-accelerate>=0.27.0
-cv2>=4.8.0
->>>>>>> d6de15d804c1f02f1e2b51690b648d0bf7a8c1c9

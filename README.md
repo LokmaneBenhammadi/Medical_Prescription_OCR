@@ -1,6 +1,6 @@
 # medical_prescription_ocr
 
-Deep learning project scaffold for extracting structured information from handwritten medical prescription images.
+Deep learning project for extracting text from handwritten medical prescription images with a fine-tuned TrOCR model, a FastAPI backend, and a simple React frontend for local testing.
 
 ## 1) Architecture Overview
 
@@ -46,6 +46,10 @@ medical_prescription_ocr/
 │   └── exploration.ipynb
 ├── checkpoints/
 │   └── .gitkeep
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── vite.config.js
 ├── requirements.txt
 └── README.md
 ```
@@ -80,7 +84,40 @@ Test health endpoint:
 curl -X GET http://127.0.0.1:8000/health
 ```
 
-## 5) Dataset Sources
+## 5) Local Web App
+
+Run the backend and frontend in two terminals.
+
+### Backend
+
+```bash
+pip install -r requirements.txt
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+The backend loads the fine-tuned Hugging Face model from `khedim/Medical-Prescription-OCR`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5173
+```
+
+If you want to point the frontend to a different API URL, create `frontend/.env` with:
+
+```bash
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+## 6) Dataset Sources
 
 1. Medical Prescription Dataset (Hugging Face)  
 	 https://huggingface.co/datasets/chinmays18/medical-prescription-dataset
@@ -89,25 +126,25 @@ curl -X GET http://127.0.0.1:8000/health
 3. FUNSD (Form Understanding in Noisy Scanned Documents)  
 	 https://guillaumejaume.github.io/FUNSD/
 
-## 6) How to Train (Placeholder)
+## 7) How to Train
 
 ```bash
 python -m src.train --config configs/config.yaml
 ```
 
-## 7) How to Run Inference (Placeholder)
+## 8) How to Run Inference
 
 ```bash
 python -m src.inference --config configs/config.yaml --image path/to/prescription.jpg
 ```
 
-## 8) How to Run the API
+## 9) How to Run the API
 
 ```bash
 uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-## 9) API Endpoints
+## 10) API Endpoints
 
 ### GET /health
 
@@ -121,7 +158,8 @@ Example response:
 
 ```json
 {
-	"status": "ok"
+	"status": "ok",
+	"model_loaded": "true"
 }
 ```
 
@@ -140,27 +178,30 @@ Example response:
 
 ```json
 {
-	"message": "not implemented yet"
+	"raw_text": "clinic_name: Meadowview Health\nclinic_address: 45 Oak Ave.",
+	"lines": [
+		"clinic_name: Meadowview Health",
+		"clinic_address: 45 Oak Ave."
+	],
+	"image_id": "prescription.png",
+	"line_count": 2,
+	"processing_ms": 1842.37
 }
 ```
 
-## 10) Tech Stack
+## 11) Tech Stack
 
 | Component | Technology |
 |---|---|
 | Deep Learning | PyTorch |
 | OCR Backbone | TrOCR (Hugging Face Transformers) |
 | API Layer | FastAPI |
+| Frontend | React + Vite |
 | Image Processing | OpenCV |
 | Model/Dataset Hub | Hugging Face |
 
-## 11) Roadmap / TODO
+## 12) Notes
 
-- [ ] Implement dataset ingestion and split generation
-- [ ] Implement preprocessing and line segmentation pipeline
-- [ ] Implement TrOCR model loading and fine-tuning pipeline
-- [ ] Implement post-processing for structured prescription extraction
-- [ ] Implement inference pipeline and confidence scoring
-- [ ] Add evaluation metrics and experiment tracking
-- [ ] Add API model integration and prediction serialization
-- [ ] Add tests, CI checks, and deployment packaging
+- Default local config uses `device: auto`, so the model runs on CPU when CUDA is unavailable.
+- For faster local CPU inference, the default API config uses beam size `2`.
+- The frontend is intentionally minimal: upload an image, run OCR, and inspect raw text plus line-by-line output.

@@ -1,5 +1,5 @@
 model:
-  name: "microsoft/trocr-base-handwritten"
+  name: "khedim/Medical-Prescription-OCR"
   max_length: 128
 
 training:
@@ -20,5 +20,9 @@ data:
   hf_dataset: "chinmays18/medical-prescription-dataset"
 
 inference:
-  beam_size: 4
-  device: "cuda"
+  beam_size: 2
+  device: "auto"
+
+detection:
+  min_line_height: 15
+  preprocess_for_lines: true
