@@ -16,3 +16,4 @@ venv/
 *.pyc
 .pytest_cache/
 Downloads/
+secrets.txt
