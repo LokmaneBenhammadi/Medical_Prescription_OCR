@@ -1,5 +1,8 @@
+#the online url is khedim
+# model:
+#   name: "khedim/Medical-Prescription-OCR"
 model:
-  name: "khedim/Medical-Prescription-OCR"
+  name: "checkpoints/medical-prescription-ocr"
   max_length: 128
 
 training:

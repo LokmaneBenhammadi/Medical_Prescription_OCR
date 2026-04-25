@@ -18,3 +18,12 @@ venv/
 Downloads/
 secrets.txt
 Screenshots/
+
+# Hugging Face cache and tokens
+.hf_cache/
+.cache/huggingface/
+
+# Environment variables
+.env
+.venv/
+env/

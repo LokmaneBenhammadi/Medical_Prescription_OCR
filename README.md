@@ -97,7 +97,33 @@ uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 
 The backend loads the fine-tuned Hugging Face model from `khedim/Medical-Prescription-OCR`.
 
-### Frontend
+### Fully Offline CPU Setup
+
+Use this flow if you want to run everything locally on CPU after downloading the model once.
+
+1. Download the checkpoint from Hugging Face into the repo:
+
+```bash
+hf download khedim/Medical-Prescription-OCR \
+	--local-dir checkpoints/medical-prescription-ocr
+```
+
+2. Point the app at the local checkpoint by updating `configs/config.yaml`:
+
+```yaml
+model:
+	name: "checkpoints/medical-prescription-ocr"
+```
+
+3. Start the backend in offline mode so it does not contact Hugging Face again:
+
+```bash
+export TRANSFORMERS_OFFLINE=1
+export HF_HUB_OFFLINE=1
+uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+4. Start the frontend in a second terminal:
 
 ```bash
 cd frontend
@@ -105,11 +131,15 @@ npm install
 npm run dev
 ```
 
-Then open:
+5. Open the app in your browser:
 
 ```text
 http://127.0.0.1:5173
 ```
+
+### Frontend
+
+If you are not using the offline CPU flow above, run the frontend in a second terminal with `cd frontend`, `npm install`, and `npm run dev`, then open `http://127.0.0.1:5173`.
 
 If you want to point the frontend to a different API URL, create `frontend/.env` with:
 
