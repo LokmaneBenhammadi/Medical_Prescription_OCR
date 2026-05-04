@@ -1,0 +1,368 @@
+================================================================
+  PRESENTATION SCRIPT — TEDx STYLE
+  Medical Prescription OCR with TrOCR
+  Benhammadi Lokmane — ESI, May 2025
+================================================================
+
+
+----------------------------------------------------------------
+SLIDE 1 — Title / Hook
+----------------------------------------------------------------
+
+Slide Title : "7,000 deaths. Every year. Because of handwriting."
+
+Visual : The number 7,000 displayed large on a dark background.
+         Below, in small text: "U.S. medication errors — CDC"
+
+Script :
+  Seven thousand people.
+
+  [Pause]
+
+  Not because of a virus. Not because of an accident.
+  Because of a prescription… that no one could read.
+
+  [Pause]
+
+  A doctor writes too fast. A pharmacist guesses.
+  And someone takes the wrong drug, at the wrong dose.
+
+  This project is my answer to that problem.
+  Not with words — with code, data, and Deep Learning.
+
+  My name is Lokmane Benhammadi, a student at ESI.
+  And today, I'm going to show you how a machine can read
+  what a human no longer can.
+
+
+----------------------------------------------------------------
+SLIDE 2 — Agenda
+----------------------------------------------------------------
+
+Slide Title : "5 acts. 12 minutes. One solution."
+
+Visual : The 5 acts listed clearly:
+         Problem · Solution · Approach · Demo · Conclusion
+
+Script :
+  We're going to move fast, but we're going to go far.
+
+  Five acts. Like a play — because there's a real problem,
+  a real hero, and a real ending.
+
+  I'm not going to drown you in equations.
+  I'm going to show you how we go from zero to 87% accuracy —
+  not in theory, in practice.
+
+
+----------------------------------------------------------------
+SLIDE 3 — Act 1: The Problem
+----------------------------------------------------------------
+
+Slide Title : "The problem we normalized."
+
+Visual : Photo of an illegible handwritten prescription.
+         One word in large text: "Illegible?"
+
+Script :
+  We have normalized something absurd.
+
+  In thousands of clinics today — not just in Algeria, everywhere —
+  a doctor scribbles on a piece of paper,
+  and a pharmacist has to guess.
+
+  [Pause]
+
+  This isn't negligence. It's a systemic failure.
+  And no one has properly solved it.
+
+  Until now.
+
+
+----------------------------------------------------------------
+SLIDE 4 — Why It's Hard
+----------------------------------------------------------------
+
+Slide Title : "Three enemies. One model."
+
+Visual : Three icons:
+         [A] Medical vocabulary · [#] Different templates · [Phone] Blurry photos
+
+Script :
+  Understanding a prescription means solving three problems at once.
+
+  First enemy: vocabulary.
+  "Hydrochlorothiazide" — no classic OCR engine knows this word.
+  It's out-of-distribution.
+
+  Second enemy: layout.
+  Every clinic uses a different format. Every doctor, their own logic.
+
+  Third enemy: image quality.
+  A photo taken with a phone, shadows on the paper, tilted angle…
+
+  [Pause]
+
+  Tesseract, EasyOCR, PaddleOCR — all fail on at least two of these three.
+
+  Our model attacks all three at once.
+
+
+----------------------------------------------------------------
+SLIDE 5 — State of the Art Comparison
+----------------------------------------------------------------
+
+Slide Title : "Why existing solutions fall short."
+
+Visual : Comparison table — checkmarks and crosses for each approach,
+         our solution with three checkmarks.
+
+Script :
+  Here's the reality of the market.
+
+  Tesseract? Built for printed text.
+  On cursive medical handwriting, it's blind.
+
+  Generic deep OCR tools like PaddleOCR? Better.
+  But without medical context, they hallucinate drug names.
+
+  Base TrOCR? Pre-trained on handwriting —
+  already a stronger starting point.
+
+  But only our fine-tuned model checks all three boxes:
+  cursive handwriting, medical vocabulary, noise robustness.
+
+  [Pause]
+
+  And that's where we come in.
+
+
+----------------------------------------------------------------
+SLIDE 6 — Act 2: The Solution (Pipeline)
+----------------------------------------------------------------
+
+Slide Title : "From raw image to structured JSON — in under 2 seconds."
+
+Visual : Horizontal pipeline:
+         Image → Preprocessing → Line Segmentation → TrOCR → Post-processing → JSON
+
+Script :
+  Here is our complete pipeline. Step by step.
+
+  We take a prescription photo — JPG, PNG, PDF, whatever.
+  We clean it: denoising, binarization, deskewing.
+  We cut out each handwritten line individually.
+  We run each line through TrOCR.
+  And we reassemble everything into a clean, structured, usable JSON.
+
+  [Pause]
+
+  From visual chaos… to data. In under two seconds.
+
+
+----------------------------------------------------------------
+SLIDE 7 — Why TrOCR
+----------------------------------------------------------------
+
+Slide Title : "Why TrOCR? Three solid reasons."
+
+Visual : Three blocks:
+         [Brain] Pretrained LM · [Pen] Cursive-familiar · [HF logo] HuggingFace ecosystem
+
+Script :
+  Why this model and not another?
+
+  TrOCR is an encoder-decoder architecture.
+  The visual encoder is BEiT — it understands images as visual patches.
+  The decoder is RoBERTa — it generates text like a real language model.
+
+  Result: the model doesn't guess letter by letter.
+  It understands words, context.
+
+  And the trocr-base-handwritten checkpoint was already pre-trained
+  on cursive handwriting. We're not starting from scratch.
+
+  [Pause]
+
+  We could spend our entire budget on data and fine-tuning.
+  Not on architecture engineering.
+
+
+----------------------------------------------------------------
+SLIDE 8 — The Approach: 6 Steps
+----------------------------------------------------------------
+
+Slide Title : "Six steps. Zero magic."
+
+Visual : Horizontal stepper — 6 numbered circles.
+
+Script :
+  Now, the concrete engineering.
+
+  Six steps, from start to finish.
+  No black box. No "it just works mysteriously."
+
+  Every step has a deliverable. Every decision has a reason.
+
+  Let's go.
+
+
+----------------------------------------------------------------
+SLIDE 9 — Dataset & Augmentation
+----------------------------------------------------------------
+
+Slide Title : "The data: our foundation."
+
+Visual : Sample line crops with their ground-truth transcriptions.
+
+Script :
+  We worked with the chinmays18 dataset —
+  publicly available on Hugging Face Hub.
+
+  Around 5,000 line crops.
+  Each line has its exact transcription:
+  patient, drug, dose, frequency.
+
+  Classic split: 80% training, 10% validation, 10% test.
+
+  [Pause]
+
+  But 5,000 samples is small.
+  So we augmented artificially:
+  slight rotation, blur, contrast jitter, elastic distortion.
+
+  We tripled the effective training diversity.
+  Without adding a single real prescription.
+
+
+----------------------------------------------------------------
+SLIDE 10 — Fine-tuning & Results
+----------------------------------------------------------------
+
+Slide Title : "From 78% to 4% error rate. The numbers speak."
+
+Visual : Before/after table:
+         CER    78%  →   4%
+         WER    92%  →  11%
+         Exact   3%  →  87%
+
+Script :
+  Here's the moment we've all been waiting for.
+
+  Before fine-tuning — the base model, no adaptation —
+  CER of 78%. Meaning: almost every character is wrong.
+  Exact match? 3%. The machine recognizes almost nothing correctly.
+
+  [Pause]
+
+  After 30 epochs of fine-tuning on our medical data…
+
+  CER: 4%.
+  Exact match: 87%.
+
+  [Pause — Let the numbers sink in]
+
+  Even the latency stays reasonable:
+  1.6 seconds per prescription on GPU.
+
+  This is not theory.
+  These are real results on our held-out test set.
+
+
+----------------------------------------------------------------
+SLIDE 11 — Demo (Frontend + Backend)
+----------------------------------------------------------------
+
+Slide Title : "See it for yourself."
+
+Visual : Screenshot of the React interface —
+         upload zone + structured results side by side.
+
+Script :
+  We didn't stop at the model.
+
+  We built a real application.
+
+  A FastAPI backend — a single /predict route,
+  the model loaded once at startup, JSON output.
+
+  A React frontend — drag and drop, image preview,
+  extracted lines displayed, processing time shown.
+
+  [Pause]
+
+  You upload a prescription photo.
+  In under 2 seconds, you get:
+  the patient, the medications, the doses, the frequency,
+  the doctor's signature — all structured, all readable.
+
+  [Launch live demo]
+
+
+----------------------------------------------------------------
+SLIDE 12 — Conclusion & Future Work
+----------------------------------------------------------------
+
+Slide Title : "This is just the beginning."
+
+Visual : Three arrows pointing forward:
+         [1] Donut End-to-End · [2] RxNorm Drug Linker · [3] Arabic & French
+
+Script :
+  This project taught me something important.
+
+  Technology is not the problem.
+  The data exists. The models exist. The tools exist.
+
+  The real challenge is putting it all together —
+  and making it work in the real world.
+
+  [Pause]
+
+  What you saw today is a foundation.
+  The next step: replace our cascade pipeline with Donut —
+  an end-to-end architecture that goes straight from image to JSON,
+  no segmentation step needed.
+
+  Then: Arabic and French support —
+  because this solution needs to work here, in Algeria.
+
+  [Pause — Make eye contact with the jury]
+
+  Seven thousand deaths a year. Over illegible handwriting.
+
+  This problem has a technical solution.
+  It starts here. It starts now.
+
+  Thank you.
+
+
+================================================================
+  DELIVERY TIPS
+================================================================
+
+PACING
+  Every [Pause] lasts 2 to 3 seconds. Don't skip them.
+  They give the jury time to absorb what you just said.
+
+SLIDE 10 (results)
+  Slow down deliberately. Let "4%" and "87%" stand alone
+  in the room before you move on.
+
+SLIDE 11 (demo)
+  Have your app already open and ready before you start.
+  Don't search for the tab live — it breaks the momentum.
+
+NARRATIVE LOOP
+  Use the exact same words — "7,000 deaths" — at the opening and the close.
+  It's a narrative loop. The jury will remember it.
+
+EYE CONTACT
+  On the conclusion slide, stop looking at your notes.
+  Look directly at the jury. That's where it counts.
+
+================================================================
+  Good luck, Lokmane! 🚀
+  github.com/lokmane-bnh/prescription-ocr
+  huggingface.co/lokmane-bnh/trocr-prescriptions
+================================================================
